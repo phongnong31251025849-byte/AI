@@ -1,0 +1,19 @@
+import folium
+center = [10.761337773657852, 106.66830435089211]
+m = folium.Map(location=center, zoom_start=13)
+folium.Marker(
+    location=center,
+    popup="Kho hàng trung tâm",
+    tooltip="Kho hàng",
+    icon=folium.Icon(color="blue", icon="home")
+).add_to(m)
+service_radii = [3, 5, 10]
+for r in service_radii:
+    folium.Circle(
+        location=center,
+        radius=r * 1000,
+        color="blue" if r == 3 else "green" if r == 5 else "red",
+        fill=True,
+        fill_opacity=0.2
+    ).add_to(m)
+m
