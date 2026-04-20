@@ -1,7 +1,7 @@
-from geopy.geocoders import Nominatim
 import folium
-geolocator=Nominatim(user_agent="geoapi")
-addresses = [
+from geopy.geocoders import Nominatim
+from geopy.distance import geodesic
+places = [
     "Chợ Bến Thành, Quận 1, Hồ Chí Minh",
     "Dinh Độc Lập, Quận 1, Hồ Chí Minh",
     "Nhà thờ Đức Bà Sài Gòn, Quận 1, Hồ Chí Minh",
@@ -10,24 +10,25 @@ addresses = [
     "Nhà hát Thành phố, Quận 1, Hồ Chí Minh",
     "Phố đi bộ Nguyễn Huệ, Quận 1, Hồ Chí Minh",
     "Công viên Tao Đàn, Quận 1, Hồ Chí Minh",
-    "Landmark 81, Bình Thạnh, Hồ Chí Minh",
-    "Thảo Cầm Viên Sài Gòn, Quận 1, Hồ Chí Minh"
+    "Landmark 81, Bình Thạnh, Hồ Chí Minh"
 ]
+geolocator = Nominatim(user_agent="map_app")
 locations = []
-for addr in addresses:
-    try:
-        loc = geolocator.geocode(addr)
-        if loc:
-              locations.append({"address": addr, "vdo": location.latitude, "kdo": location.longitude})
-    except Exception as e:
-          print(f"Lỗi khi xử lý {addr}: {e}")
-m = folium.Map(location=[10.761263992578904, 106.66831507972776],zoom_start=13)
-for loc in locations:
+for p in places:
+    loc = geolocator.geocode(p)
+    if loc:
+        locations.append((p, (loc.latitude, loc.longitude)))
+center_name, center_coord = locations[0]
+m = folium.Map(location=center_coord, zoom_start=14)
+folium.Marker(
+    location=center_coord,
+    popup=f"Trung tâm: {center_name}",
+    icon=folium.Icon(color="red")
+).add_to(m)
+for name, coord in locations:
+    d = geodesic(center_coord, coord).km
     folium.Marker(
-        location=[loc["vdo"], loc["kdo"]],
-        popup=loc["address"],
-        tooltip=loc["address"],
-        icon=folium.Icon(color="red", icon="info-sign")
+        location=coord,
+        popup=f"{name}<br>{d:.2f} km"
     ).add_to(m)
-coords = [(loc["vdo"], loc["kdo"]) for loc in locations]
-folium.PolyLine(coords, color="blue", weight=2.5, opacity=0.8).add_to(m)
+m  
