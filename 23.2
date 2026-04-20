@@ -1,0 +1,33 @@
+from geopy.geocoders import Nominatim
+import folium
+geolocator=Nominatim(user_agent="geoapi")
+addresses = [
+    "Chợ Bến Thành, Quận 1, Hồ Chí Minh",
+    "Dinh Độc Lập, Quận 1, Hồ Chí Minh",
+    "Nhà thờ Đức Bà Sài Gòn, Quận 1, Hồ Chí Minh",
+    "Bảo tàng Chứng tích Chiến tranh, Quận 3, Hồ Chí Minh",
+    "Tòa nhà Bitexco, Quận 1, Hồ Chí Minh",
+    "Nhà hát Thành phố, Quận 1, Hồ Chí Minh",
+    "Phố đi bộ Nguyễn Huệ, Quận 1, Hồ Chí Minh",
+    "Công viên Tao Đàn, Quận 1, Hồ Chí Minh",
+    "Landmark 81, Bình Thạnh, Hồ Chí Minh",
+    "Thảo Cầm Viên Sài Gòn, Quận 1, Hồ Chí Minh"
+]
+locations = []
+for addr in addresses:
+    try:
+        loc = geolocator.geocode(addr)
+        if loc:
+              locations.append({"address": addr, "vdo": location.latitude, "kdo": location.longitude})
+    except Exception as e:
+          print(f"Lỗi khi xử lý {addr}: {e}")
+m = folium.Map(location=[10.761263992578904, 106.66831507972776],zoom_start=13)
+for loc in locations:
+    folium.Marker(
+        location=[loc["vdo"], loc["kdo"]],
+        popup=loc["address"],
+        tooltip=loc["address"],
+        icon=folium.Icon(color="red", icon="info-sign")
+    ).add_to(m)
+coords = [(loc["vdo"], loc["kdo"]) for loc in locations]
+folium.PolyLine(coords, color="blue", weight=2.5, opacity=0.8).add_to(m)
