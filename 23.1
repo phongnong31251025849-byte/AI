@@ -1,0 +1,9 @@
+import folium
+m = folium.Map(location=[10.761263992578904, 106.66831507972776],zoom_start=15)
+folium.Marker([10.761263992578904, 106.66831507972776], popup ="UEH-B").add_to(m)
+folium.Marker([10.758028519181767, 106.65952239824412], popup ="Bệnh viện Chợ Rẫy").add_to(m)
+folium.Marker([10.770722346968107, 106.6698906085636], popup ="Vạn Hạnh Mall").add_to(m)
+folium.Marker([10.763546370037863, 106.66206814214198], popup="Bến xe Nhật Tảo").add_to(m)
+folium.Marker([10.768082968756808, 106.66659919981322], popup="UBND Phường Diên Hồng").add_to(m)
+folium.LayerControl().add_to(m)
+m
