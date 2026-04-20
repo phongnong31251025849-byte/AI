@@ -1,0 +1,12 @@
+import folium
+from folium.plugins import HeatMap
+import random
+center = [10.762622, 106.682231]
+m = folium.Map(location=center, zoom_start=15)
+data_points = []
+for _ in range(200):
+    vdo = center[0] + random.uniform(-0.005, 0.005)
+    kdo = center[1] + random.uniform(-0.005, 0.005)
+    data_points.append([vdo, kdo])
+HeatMap(data_points, radius=20, blur=15, max_zoom=1).add_to(m)
+m
